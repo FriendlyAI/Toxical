@@ -1,4 +1,10 @@
 import tweepy
+from textblob import TextBlob
+import re
+
+
+def clean_tweet(tweet):
+    return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])| (\w+:\ / \ / \S+)", " ", tweet).split())
 
 consumer_key = 'hzWWIj8rAZIm8knatemXkbPpC'
 consumer_secret = 'jbBTNbmEubICWRPEb3OH7bzpKiR5NQ5wM2BG3mE4a2WaBKVukg'
@@ -13,4 +19,5 @@ api = tweepy.API(auth)
 
 public_tweets = api.home_timeline()
 for tweet in public_tweets:
-    print(tweet.text)
+    tweet_text = clean_tweet(tweet.text)
+    analysis = TextBlob(clean_tweet(tweet))
