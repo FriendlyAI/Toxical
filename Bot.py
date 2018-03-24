@@ -3,39 +3,25 @@ import asyncio
 import requests
 from discord import Game
 from discord.ext.commands import Bot
+from pymongo import MongoClient
 
 BOT_PREFIX = ("?", "!")
 TOKEN = "NDI3MTQ3Mjc0NDk4MzQyOTMy.DZgT3g.UwYjlweXBF0b1X03r74lUt-v1ms"  # Get at discordapp.com/developers/applications/me
 
 client = Bot(command_prefix=BOT_PREFIX)
-
-# @client.command(name='8ball',
-#                 description="Answers a yes/no question.",
-#                 brief="Answers from the beyond.",
-#                 aliases=['eight_ball', 'eightball', '8-ball'],
-#                 pass_context=True)
-# async def eight_ball(context):
-#     possible_responses = [
-#         'That is a resounding no',
-#         'It is not looking likely',
-#         'Too hard to tell',
-#         'It is quite possible',
-#         'Definitely',
-#     ]
-#     await client.say(random.choice(possible_responses) + ", " + context.message.author.mention)
-#
-#
-# @client.command()
-# async def square(number):
-#     squared_value = int(number) * int(number)
-#     await client.say(str(number) + " squared is " + str(squared_value))
-
+c = MongoClient()
+db = c.users
 
 @client.event
 async def on_ready():
-    await client.change_presence(game=Game(name="your mom"))
+    await client.change_presence(game=Game(name="toxic"))
     print("Logged in as " + client.user.name)
-
+    servers = list(client.servers)
+    for server in client.servers:
+        db.users.insert_one({server: []})
+        for member in server:
+            db.users.find(server).append({member.id, 100})
+    print(db.users.count())
 
 # @client.command()
 # async def bitcoin():
