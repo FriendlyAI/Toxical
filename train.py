@@ -3,6 +3,10 @@ import tensorflow as tf
 import re
 
 
+WORDS_LIST = np.load('wordsList.npy').tolist()
+WORDS_LIST = [word.decode('UTF-8') for word in WORDS_LIST]  # Encode words as UTF-8
+WORD_VECTORS = np.load('wordVectors.npy')
+
 def main():
     # wordsList = np.load('wordsList.npy')
     # print('Loaded the word list!')
@@ -10,11 +14,18 @@ def main():
     # wordsList = [word.decode('UTF-8') for word in wordsList]  # Encode words as UTF-8
     # wordVectors = np.load('wordVectors.npy')
     # print('Loaded the word vectors!')
-    #
+
     # baseballIndex = wordsList.index('india')
     # print(wordVectors[baseballIndex])
     while True:
-        print(clean(input()))
+        vectorize(clean(input()))
+
+
+def vectorize(sentence_array):
+    for word in sentence_array:
+        index = WORDS_LIST.index(word)
+        vector = WORD_VECTORS[index]
+        print(vector)
 
 
 def clean(sentence):
