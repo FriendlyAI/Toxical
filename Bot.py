@@ -10,18 +10,21 @@ TOKEN = "NDI3MTQ3Mjc0NDk4MzQyOTMy.DZgT3g.UwYjlweXBF0b1X03r74lUt-v1ms"  # Get at 
 
 client = Bot(command_prefix=BOT_PREFIX)
 c = MongoClient()
-db = c.users
+db = c['toxicity']
+
 
 @client.event
 async def on_ready():
     await client.change_presence(game=Game(name="toxic"))
     print("Logged in as " + client.user.name)
     servers = list(client.servers)
-    for server in client.servers:
-        db.users.insert_one({server: []})
-        for member in server:
-            db.users.find(server).append({member.id, 100})
-    print(db.users.count())
+    for x in range(len(servers)):
+        ser = db.serves
+        ser.insert_one({servers[x].id : []})
+        for member in servers[x].members:
+            print(member.id)
+            ser.find(servers[x])#.append({member.id, 100})
+
 
 # @client.command()
 # async def bitcoin():
