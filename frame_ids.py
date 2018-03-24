@@ -1,5 +1,4 @@
 import numpy as np
-import tensorflow as tf
 import re
 import csv
 
@@ -15,11 +14,6 @@ NUM_LINES = 988
 MAX_LENGTH = 40
 
 ids = np.zeros((NUM_LINES, MAX_LENGTH), dtype='int32')
-
-batchSize = 24
-lstmUnits = 64
-numClasses = 2
-iterations = 100000
 
 
 def main():
