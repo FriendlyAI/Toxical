@@ -1,34 +1,26 @@
 # Toxical
 
-A Discord built using the discord.py API to find toxicity in chats, notify the users, and ban/warn repetitive toxic members  
+A Discord bot built to find toxicity in chats, notify the users, and ban/warn repetitive toxic members to make Discord chats less "cancerous" and ultimately a safer environment
 
 ## Adding it to Your Server
 
 Click [this](https://discordapp.com/oauth2/authorize?client_id=427147274498342932&scope=bot) link, select the server you want the bot to join (you need a certain level of authorization to be able to add it to a server), and authorize the bot.
 
-## Running the tests
+## Testing
 
-Explain how to run the automated tests for this system
+Default prefix: "!"
+###Commands (WIP)
+#####!score - returns the overall sentiment value of a user 
+--insert gif here--
 
-### Break down into end to end tests
+Warning a toxic user
 
-Explain what these tests test and why
+--insert gif here
 
-```
-Give an example
-```
+Banning repeated toxic users
 
-### And coding style tests
+--insert gif here--
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
@@ -37,16 +29,12 @@ Add additional notes about how to deploy this on a live system
 * [discord.py](http://discordpy.readthedocs.io/en/latest/) - Used to implement a functional Discord bot
 * [Vader Sentiment Analysis](https://github.com/cjhutto/vaderSentiment) - The other AI that returned the relative negativity of chat logs
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+* Anyone whose code we used to make our code work
+* Inspiration from the many toxic chats we had among friends
+* The Discord API server for helping us with issues we had 
