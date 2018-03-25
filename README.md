@@ -18,9 +18,9 @@ Default prefix: "!"
 
 ### Automoderation
 
-* Warning a toxic user
+* Warning a toxic user if their sentiment value goes under 15 
 
---insert gif here
+![Gif](https://media.giphy.com/media/PO5EuTADf3hCPICG2W/giphy.gif)
 
 * Banning a repeated toxic user
 
