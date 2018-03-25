@@ -1,6 +1,6 @@
 # Toxical
 
-A Discord bot built to find toxicity in chats, notify the users, and ban/warn repetitive toxic members to make Discord chats less "cancerous" and ultimately a safer environment
+A Discord bot built to find toxicity in chats, notify the users, and ban/warn the repetitive toxic members, creating a much more emotionally stable environment that promotes greater safety 
 
 ## Adding it to Your Server
 
