@@ -22,9 +22,9 @@ Default prefix: "!"
 
 ![Gif](https://media.giphy.com/media/PO5EuTADf3hCPICG2W/giphy.gif)
 
-* Banning a repeated toxic user
+* Banning a repeated toxic user if their sentiment value goes under 10
 
-![Gif](https://s1.gifyu.com/images/banaf11b5c891990744.gif)
+https://s1.gifyu.com/images/banaf11b5c891990744.gif
 
 
 ## Built With
