@@ -3,6 +3,7 @@ from discord import Game
 from discord.ext.commands import Bot
 from pymongo import MongoClient
 from temp_sentiment_analyzer import analyze
+from collections import deque
 
 BOT_PREFIX = ("?", "!")
 TOKEN = "NDI3MTQ3Mjc0NDk4MzQyOTMy.DZgT3g.UwYjlweXBF0b1X03r74lUt-v1ms" # Get at discordapp.com/developers/applications/me
