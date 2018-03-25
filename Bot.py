@@ -11,8 +11,6 @@ client = Bot(command_prefix=BOT_PREFIX)
 c = MongoClient()
 db = c['toxicity']
 
-spoints = {}
-
 
 @client.event
 async def on_ready():
@@ -41,11 +39,6 @@ async def on_message(message):
     if message.author.id != client.user.id:
         message_toxicity_string, toxicity_dict = analyze(message.content)
         await client.send_message(message.channel, message_toxicity_string)
-        if message.author.server.id not in spoints:
-            spoints[message.author.server.id] = []
-        if len(spoints[message.author.server.id]) > 100:
-            spoints.get(message.author.server.id).pop()
-        spoints.get(message.author.server.id).append(message.content)
 
 
 client.loop.create_task(list_servers())
