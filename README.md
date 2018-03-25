@@ -24,7 +24,7 @@ Default prefix: "!"
 
 * Banning a repeated toxic user
 
-![Gif](https://i.imgur.com/14Kzqot.gifv)
+![Gif](https://s1.gifyu.com/images/banaf11b5c891990744.gif)
 
 
 ## Built With
