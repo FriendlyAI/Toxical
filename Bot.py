@@ -13,7 +13,7 @@ client = Bot(command_prefix=BOT_PREFIX)
 c = MongoClient()
 db = c['toxicity']
 
-MAX_SCORE = 2
+MAX_SCORE = 50
 database = db.serves
 
 
