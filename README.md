@@ -10,9 +10,9 @@ Click [this](https://discordapp.com/oauth2/authorize?client_id=42714727449834293
 
 Default prefix: "!"
 
-###Commands (WIP)
+### Commands (WIP)
 
-#####!score - returns the overall sentiment value of a user 
+##### !score - returns the overall sentiment value of a user 
 
 --insert gif here--
 
