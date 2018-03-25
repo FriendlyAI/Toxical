@@ -22,7 +22,7 @@ Default prefix: "!"
 
 --insert gif here
 
-* Banning repeated toxic users
+* Banning a repeated toxic user
 
 --insert gif here--
 
