@@ -3,7 +3,6 @@ from discord import Game
 from discord.ext.commands import Bot
 from pymongo import MongoClient
 from analyze_sentiment import analyze
-from bson.json_util import dumps
 
 BOT_PREFIX = '!'
 TOKEN = 'NDI3MTQ3Mjc0NDk4MzQyOTMy.DZgT3g.UwYjlweXBF0b1X03r74lUt-v1ms'  # Get at discordapp.com/developers/applications/me
@@ -18,12 +17,14 @@ async def on_ready():
     await client.change_presence(game=Game(name='toxic'))
     print('Logged in as ' + client.user.name)
     servers = list(client.servers)
-    ser = db.serves
-    for x in range(len(servers)):
-        for member in servers[x].members:
-            ser.insert_one({'Servers':
-                                {'SID': servers[x].id, 'users':
-                                    {'UID': member.id, 'points':  100}}})
+    database = db.serves
+    for server in servers:
+        for member in server.members:
+            # print(database.find({'UID': member.id}).count())
+            if database.find({'UID': member.id}).count() == 0:
+                database.insert_one({'UID': member.id, 'points': 100})
+    # print(list(database.find()))
+
 
 
 async def list_servers():
@@ -45,16 +46,11 @@ async def on_message(message):
 
 @client.command(pass_context=True)
 async def score(ctx):
-
-    await client.send_message(ctx.message.channel, ctx.message.author)
-    a = db.serves.find()
-    dumps(a)
-    c = 0
-    for server in a:
-        print(list(server))
-        c+=1
-        # server.get('Servers').get('users').get
-    print(c)
+    database = db.serves.find()
+    for user in database:
+        if user.get('UID') == ctx.message.author.id:
+            await client.send_message(ctx.message.channel,
+                                      f'{ctx.message.author}\'s score is {user.get("points")}/100')
 
 
 client.loop.create_task(list_servers())
