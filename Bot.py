@@ -3,13 +3,17 @@ from discord import Game
 from discord.ext.commands import Bot
 from pymongo import MongoClient
 from analyze_sentiment import analyze
+import time
 
 BOT_PREFIX = '!'
-TOKEN = 'NDI3MTQ3Mjc0NDk4MzQyOTMy.DZgT3g.UwYjlweXBF0b1X03r74lUt-v1ms'  # Get at discordapp.com/developers/applications/me
+# Get at discordapp.com/developers/applications/me
+TOKEN = 'NDI3MTQ3Mjc0NDk4MzQyOTMy.DZgT3g.UwYjlweXBF0b1X03r74lUt-v1ms'
 
 client = Bot(command_prefix=BOT_PREFIX)
 c = MongoClient()
 db = c['toxicity']
+
+MAX_SCORE = 50
 
 
 @client.event
@@ -20,11 +24,9 @@ async def on_ready():
     database = db.serves
     for server in servers:
         for member in server.members:
-            # print(database.find({'UID': member.id}).count())
             if database.find({'UID': member.id}).count() == 0:
-                database.insert_one({'UID': member.id, 'points': 100})
+                database.insert_one({'UID': member.id, 'points': MAX_SCORE, 'last message': time.time()})
     # print(list(database.find()))
-
 
 
 async def list_servers():
@@ -41,16 +43,50 @@ async def on_message(message):
     await client.process_commands(message)
     if message.content != '!score' and message.author.id != client.user.id:
         message_toxicity_string, toxicity_dict = analyze(message.content)
-        await client.send_message(message.channel, message_toxicity_string)
+        # await client.send_message(message.channel, message_toxicity_string)
+
+        # Update score
+
+        database_match = db.serves.find({'UID': message.author.id})
+        for user in database_match:
+            prev_score = user.get('points')
+            old_time = user.get('last message')
+
+        current_time = time.time()
+
+        time_points = (current_time - old_time) / 600
+        score_change = min(toxicity_dict['watson'], 0)
+
+        new_score = min(prev_score + time_points, MAX_SCORE) + score_change
+
+        db.serves.update({'UID': message.author.id},
+                         {'UID': message.author.id,
+                          'points': new_score,
+                          'last message': current_time})
+
+        if new_score <= 25:
+            await client.send_message(message.channel,
+                                      f'**WARNING, <@{message.author.id}>, your positivity score is very low '
+                                      f'({"{0:0.1f}".format(new_score)}/{MAX_SCORE})**')
 
 
 @client.command(pass_context=True)
 async def score(ctx):
-    database = db.serves.find()
-    for user in database:
-        if user.get('UID') == ctx.message.author.id:
-            await client.send_message(ctx.message.channel,
-                                      f'{ctx.message.author}\'s score is {user.get("points")}/100')
+    database_match = db.serves.find({'UID': ctx.message.author.id})
+    for user in database_match:
+        old_time = user.get('last message')
+        current_time = time.time()
+        time_points = (current_time - old_time) / 600
+        prev_score = user.get('points')
+
+    db.serves.update({'UID': ctx.message.author.id},
+                     {'UID': ctx.message.author.id,
+                      'points': min(prev_score + time_points, MAX_SCORE),
+                      'last message': current_time})
+
+    await client.send_message(ctx.message.channel,
+                              f'{ctx.message.author}\'s score is '
+                              f'{"{0:0.1f}".format(min(prev_score + time_points, MAX_SCORE))}/{MAX_SCORE}')
 
 
 client.loop.create_task(list_servers())
