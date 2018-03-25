@@ -6,7 +6,7 @@ A Discord bot built to find toxicity in chats, notify the users, and ban/warn re
 
 Click [this](https://discordapp.com/oauth2/authorize?client_id=427147274498342932&scope=bot) link, select the server you want the bot to join (you need a certain level of authorization to be able to add it to a server), and authorize the bot.
 
-## Testing
+## Testing the Bot
 
 Default prefix: "!"
 
@@ -15,6 +15,8 @@ Default prefix: "!"
 ##### !score - returns the overall sentiment value of a user 
 
 --insert gif here--
+
+### Automoderation
 
 Warning a toxic user
 
