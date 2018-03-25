@@ -46,7 +46,7 @@ async def list_servers():
 async def on_message(message):
     if message.author.id != client.user.id:
         message_toxicity = analyze(message.content)
-        await client.send_message(message.channel, message_toxicity)
+        await client.send_message(message.channel, message_toxicity[0])
 
 client.loop.create_task(list_servers())
 client.run(TOKEN)

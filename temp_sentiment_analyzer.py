@@ -7,11 +7,10 @@ analyzer = SentimentIntensityAnalyzer()
 def analyze(sentence):
     sentence = clean(sentence)
     vs = analyzer.polarity_scores(sentence)
-    return f'{sentence}' \
-           f'\nNegative: {vs["neg"]}' \
-           f'\nPositive: {vs["pos"]}' \
-           f'\nNeutral: {vs["neu"]}' \
-           f'\nCompound: {vs["compound"]}'
+
+    return (f'{sentence}\nNegative: {vs["neg"]}\nPositive: {vs["pos"]}\nNeutral: {vs["neu"]}'
+            f'\nCompound: {vs["compound"]}',
+            {'negative': vs['neg'], 'positive': vs['pos'], 'neutral': vs['neu'], 'compound': vs['compound']})
 
 
 def clean(sentence):
