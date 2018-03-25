@@ -4,6 +4,7 @@ import requests
 from discord import Game
 from discord.ext.commands import Bot
 from pymongo import MongoClient
+from temp_sentiment_analyzer import analyze
 
 BOT_PREFIX = ("?", "!")
 TOKEN = "NDI3MTQ3Mjc0NDk4MzQyOTMy.DZgT3g.UwYjlweXBF0b1X03r74lUt-v1ms"  # Get at discordapp.com/developers/applications/me
@@ -20,11 +21,7 @@ async def on_ready():
     servers = list(client.servers)
     for x in range(len(servers)):
         ser = db.serves
-        ser.insert_one({servers[x].id : []})
-        for member in servers[x].members:
-            print(member.id)
-            ser.find(servers[x])#.append({member.id, 100})
-
+        ser.insert_one({"server ID" : servers[x].id, "users" : [member.id for member in servers[x].members]})
 
 # @client.command()
 # async def bitcoin():
@@ -45,7 +42,8 @@ async def list_servers():
 @client.event
 async def on_message(message):
     if message.author.id != client.user.id:
-        await client.send_message(message.channel, message.content)
+        message_toxicity = analyze(message.content)
+        await client.send_message(message.channel, message_toxicity)
 
 client.loop.create_task(list_servers())
 client.run(TOKEN)
