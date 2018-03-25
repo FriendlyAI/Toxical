@@ -13,7 +13,9 @@ client = Bot(command_prefix=BOT_PREFIX)
 c = MongoClient()
 db = c['toxicity']
 
-MAX_SCORE = 50
+MAX_SCORE = 25
+WARNING_SCORE = 15
+BAN_SCORE = 10
 database = db.serves
 
 
@@ -72,15 +74,15 @@ async def on_message(message):
                           'points': new_score,
                           'last message': current_time})
 
-        if new_score <= 10:
+        if new_score <= BAN_SCORE:
             db.serves.remove({'UID': message.author.id})
             await client.ban(message.server.get_member(message.author.id))
 
-        elif new_score <= 25:
+        elif new_score <= WARNING_SCORE:
             await client.send_message(message.channel,
                                       f'**WARNING, <@{message.author.id}>, your positivity score is very low '
                                       f'({"{0:0.1f}".format(new_score)}/{MAX_SCORE})**'
-                                      f'\nYou will be banned if your score reaches 10 or below.')
+                                      f'\nYou will be banned if your score reaches {BAN_SCORE} or below.')
 
 
 @client.command(pass_context=True)
