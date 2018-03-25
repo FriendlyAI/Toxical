@@ -14,7 +14,7 @@ client = Bot(command_prefix=BOT_PREFIX)
 c = MongoClient()
 db = c['toxicity']
 
-queue = deque([])
+spoints = {}
 
 @client.event
 async def on_ready():
@@ -27,9 +27,6 @@ async def on_ready():
             ser.insert_one({"Servers":
                                 {"SID": servers[x].id, "users":
                                     {"UID": member.id, "points":  100}}})
-
-def calc_server_tox():
-    servetox = db.serves.find()
 
 
 # @client.command()
@@ -53,9 +50,11 @@ async def on_message(message):
     if message.author.id != client.user.id:
         message_toxicity_string, toxicity_dict = analyze(message.content)
         await client.send_message(message.channel, message_toxicity_string)
-        if len(queue) > 100:
-            queue.popleft()
-        queue.append(message.content)
+        if message.author.server.id not in spoints:
+            spoints[message.author.server.id] = []
+        if len(spoints[message.author.server.id]) > 100:
+            spoints.get(message.author.server.id).pop()
+        spoints.get(message.author.server.id).append(message.content)
 
 
 client.loop.create_task(list_servers())
