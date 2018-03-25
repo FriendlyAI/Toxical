@@ -21,11 +21,7 @@ async def on_ready():
     servers = list(client.servers)
     for x in range(len(servers)):
         ser = db.serves
-        ser.insert_one({servers[x].id : []})
-        for member in servers[x].members:
-            print(member.id)
-            ser.find(servers[x])#.append({member.id, 100})
-
+        ser.insert_one({"server ID" : servers[x].id, "users" : [member.id for member in servers[x].members]})
 
 # @client.command()
 # async def bitcoin():
