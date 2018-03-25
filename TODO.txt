@@ -1,0 +1,7 @@
+'''
+TODO
+Game name changes with overall server rating
+Commands to track user's points
+Points increase over time
+Points decrease with toxic comments
+'''
