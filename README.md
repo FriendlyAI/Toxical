@@ -9,7 +9,7 @@ What things you need to install the software and how to install them
 
 ## Adding it to Your Server
 
-Click this link, select the server you want the bot to join (you need a certain level of authorization to be able to add it to a server), and authorize the bot.
+Click [this](https://discordapp.com/oauth2/authorize?client_id=427147274498342932&scope=bot) link, select the server you want the bot to join (you need a certain level of authorization to be able to add it to a server), and authorize the bot.
 
 
 
