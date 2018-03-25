@@ -1,12 +1,12 @@
 # Toxical
 
-A Discord bot built to find toxicity in chats, notify the users, and ban/warn repetitive toxic members to make Discord chats less "cancerous" and ultimately a safer environment
+A Discord bot built to find toxicity in chats, notify the users, and ban/warn the repetitive toxic members, creating a much more emotionally stable environment that promotes greater safety 
 
 ## Adding it to Your Server
 
 Click [this](https://discordapp.com/oauth2/authorize?client_id=427147274498342932&scope=bot) link, select the server you want the bot to join (you need a certain level of authorization to be able to add it to a server), and authorize the bot.
 
-## Testing
+## Testing the Bot
 
 Default prefix: "!"
 
@@ -16,11 +16,13 @@ Default prefix: "!"
 
 --insert gif here--
 
-Warning a toxic user
+### Automoderation
+
+* Warning a toxic user
 
 --insert gif here
 
-Banning repeated toxic users
+* Banning a repeated toxic user
 
 --insert gif here--
 
