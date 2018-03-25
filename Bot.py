@@ -21,7 +21,7 @@ async def on_ready():
     servers = list(client.servers)
     ser = db.serves
     for x in range(len(servers)):
-        for member in servers[x].memebers:
+        for member in servers[x].members:
             ser.insert_one({"Servers":
                                 {"SID": servers[x].id, "users":
                                     {"UID": member.id, "points":  100}}})
