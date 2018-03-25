@@ -11,15 +11,16 @@ analyzer = SentimentIntensityAnalyzer()
 
 
 def analyze(sentence):
-    sentence = clean(sentence)
-    vs = analyzer.polarity_scores(sentence)
+    if sentence:
+        sentence = clean(sentence)
+        vs = analyzer.polarity_scores(sentence)
 
-    watson_score = watson_analyze(sentence)
+        watson_score = watson_analyze(sentence)
 
-    return (f'{sentence}\nNegative: {vs["neg"]}\nPositive: {vs["pos"]}\nNeutral: {vs["neu"]}'
-            f'\nCompound: {vs["compound"]}\nWith Watson: {(vs["compound"] + watson_score) / 2}',
-            {'negative': vs['neg'], 'positive': vs['pos'], 'neutral': vs['neu'], 'compound': vs['compound'],
-             'watson': (vs["compound"] + watson_score) / 2})
+        return (f'{sentence}\nNegative: {vs["neg"]}\nPositive: {vs["pos"]}\nNeutral: {vs["neu"]}'
+                f'\nCompound: {vs["compound"]}\nWith Watson: {(vs["compound"] + watson_score) / 2}',
+                {'negative': vs['neg'], 'positive': vs['pos'], 'neutral': vs['neu'], 'compound': vs['compound'],
+                 'watson': (vs["compound"] + watson_score) / 2})
 
 
 def watson_analyze(sentence):

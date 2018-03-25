@@ -13,7 +13,8 @@ client = Bot(command_prefix=BOT_PREFIX)
 c = MongoClient()
 db = c['toxicity']
 
-MAX_SCORE = 50
+MAX_SCORE = 2
+database = db.serves
 
 
 @client.event
@@ -21,12 +22,12 @@ async def on_ready():
     await client.change_presence(game=Game(name='toxic'))
     print('Logged in as ' + client.user.name)
     servers = list(client.servers)
-    database = db.serves
     for server in servers:
         for member in server.members:
             if database.find({'UID': member.id}).count() == 0:
                 database.insert_one({'UID': member.id, 'points': MAX_SCORE, 'last message': time.time()})
-    # print(list(database.find()))
+    for x in list(database.find()):
+        print(x)
 
 
 async def list_servers():
@@ -42,17 +43,24 @@ async def list_servers():
 async def on_message(message):
     await client.process_commands(message)
     if message.content != '!score' and message.author.id != client.user.id:
-        message_toxicity_string, toxicity_dict = analyze(message.content)
-        # await client.send_message(message.channel, message_toxicity_string)
+        try:
+            message_toxicity_string, toxicity_dict = analyze(message.content)
+            # await client.send_message(message.channel, message_toxicity_string)
+        except TypeError:  # returned none
+            return
 
         # Update score
+
+        current_time = time.time()
+        old_time = current_time
+
+        if database.find({'UID': message.author.id}).count() == 0:
+            database.insert_one({'UID': message.author.id, 'points': MAX_SCORE, 'last message': time.time()})
 
         database_match = db.serves.find({'UID': message.author.id})
         for user in database_match:
             prev_score = user.get('points')
             old_time = user.get('last message')
-
-        current_time = time.time()
 
         time_points = (current_time - old_time) / 600
         score_change = min(toxicity_dict['watson'], 0)
@@ -64,20 +72,31 @@ async def on_message(message):
                           'points': new_score,
                           'last message': current_time})
 
-        if new_score <= 25:
+        if new_score <= 10:
+            db.serves.remove({'UID': message.author.id})
+            await client.ban(message.server.get_member(message.author.id))
+
+        elif new_score <= 25:
             await client.send_message(message.channel,
                                       f'**WARNING, <@{message.author.id}>, your positivity score is very low '
-                                      f'({"{0:0.1f}".format(new_score)}/{MAX_SCORE})**')
+                                      f'({"{0:0.1f}".format(new_score)}/{MAX_SCORE})**'
+                                      f'\nYou will be banned if your score reaches 10 or below.')
 
 
 @client.command(pass_context=True)
 async def score(ctx):
+
+    if database.find({'UID': ctx.message.author.id}).count() == 0:
+        database.insert_one({'UID': ctx.message.author.id, 'points': MAX_SCORE, 'last message': time.time()})
+
     database_match = db.serves.find({'UID': ctx.message.author.id})
+    current_time = time.time()
+    old_time = current_time
     for user in database_match:
         old_time = user.get('last message')
-        current_time = time.time()
-        time_points = (current_time - old_time) / 600
         prev_score = user.get('points')
+
+    time_points = (current_time - old_time) / 600
 
     db.serves.update({'UID': ctx.message.author.id},
                      {'UID': ctx.message.author.id,
