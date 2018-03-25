@@ -18,11 +18,11 @@ Default prefix: "!"
 
 ### Automoderation
 
-Warning a toxic user
+* Warning a toxic user
 
 --insert gif here
 
-Banning repeated toxic users
+* Banning repeated toxic users
 
 --insert gif here--
 
