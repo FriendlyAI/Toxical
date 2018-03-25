@@ -12,7 +12,7 @@ analyzer = SentimentIntensityAnalyzer()
 def analyze(sentence):
     sentence = clean(sentence)
     vs = analyzer.polarity_scores(sentence)
-    print(sentence, vs)
+    return sentence + '\n' + vs
 
 
 def clean(sentence):

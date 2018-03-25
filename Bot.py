@@ -4,6 +4,7 @@ import requests
 from discord import Game
 from discord.ext.commands import Bot
 from pymongo import MongoClient
+from temp_sentiment_analyzer import analyze
 
 BOT_PREFIX = ("?", "!")
 TOKEN = "NDI3MTQ3Mjc0NDk4MzQyOTMy.DZgT3g.UwYjlweXBF0b1X03r74lUt-v1ms"  # Get at discordapp.com/developers/applications/me
@@ -45,7 +46,8 @@ async def list_servers():
 @client.event
 async def on_message(message):
     if message.author.id != client.user.id:
-        await client.send_message(message.channel, message.content)
+        message_toxicity = analyze(message.content)
+        await client.send_message(message.channel, message_toxicity)
 
 client.loop.create_task(list_servers())
 client.run(TOKEN)
