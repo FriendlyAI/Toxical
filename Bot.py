@@ -19,9 +19,12 @@ async def on_ready():
     await client.change_presence(game=Game(name="toxic"))
     print("Logged in as " + client.user.name)
     servers = list(client.servers)
+    ser = db.serves
     for x in range(len(servers)):
-        ser = db.serves
-        ser.insert_one({"server ID" : servers[x].id, "users" : [member.id for member in servers[x].members]})
+        for member in servers[x].members:
+            ser.insert_one({"Servers":
+                                {"SID": servers[x].id, "users":
+                                    {"UID": member.id, "points":  100}}})
 
 # @client.command()
 # async def bitcoin():
