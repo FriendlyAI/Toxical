@@ -19,5 +19,3 @@ def clean(sentence):
     special_chars = re.compile(r'[^a-zA-Z]+')
     cleaned = re.sub(special_chars, ' ', sentence)
     return ' '.join([cleaned_word.lower() for cleaned_word in cleaned.split()])
-
-analyze(input())
