@@ -1,4 +1,5 @@
 import asyncio
+import discord
 from discord import Game
 from discord.ext.commands import Bot
 from pymongo import MongoClient
@@ -6,7 +7,7 @@ from analyze_sentiment import analyze
 import time
 
 BOT_PREFIX = '!'
-# Get at discordapp.com/developers/applications/me
+# Get at https://discordapp.com/developers/applications/me
 TOKEN = 'NDI3MTQ3Mjc0NDk4MzQyOTMy.DZgT3g.UwYjlweXBF0b1X03r74lUt-v1ms'
 
 client = Bot(command_prefix=BOT_PREFIX)
@@ -47,7 +48,7 @@ async def on_message(message):
     if message.content != '!score' and message.author.id != client.user.id:
         try:
             message_toxicity_string, toxicity_dict = analyze(message.content)
-            # await client.send_message(message.channel, message_toxicity_string)
+            await client.send_message(message.channel, message_toxicity_string)
         except TypeError:  # returned none
             return
 
@@ -75,8 +76,12 @@ async def on_message(message):
                           'last message': current_time})
 
         if new_score <= BAN_SCORE:
-            db.serves.remove({'UID': message.author.id})
-            await client.ban(message.server.get_member(message.author.id))
+            try:
+                await client.ban(message.server.get_member(message.author.id))
+            except discord.errors.Forbidden:
+                print('Privilege too low')
+            else:
+                db.serves.remove({'UID': message.author.id})
 
         elif new_score <= WARNING_SCORE:
             await client.send_message(message.channel,
@@ -91,9 +96,10 @@ async def score(ctx):
     if database.find({'UID': ctx.message.author.id}).count() == 0:
         database.insert_one({'UID': ctx.message.author.id, 'points': MAX_SCORE, 'last message': time.time()})
 
-    database_match = db.serves.find({'UID': ctx.message.author.id})
     current_time = time.time()
     old_time = current_time
+
+    database_match = db.serves.find({'UID': ctx.message.author.id})
     for user in database_match:
         old_time = user.get('last message')
         prev_score = user.get('points')
