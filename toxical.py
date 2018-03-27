@@ -48,7 +48,7 @@ async def on_message(message):
     if message.content != '!score' and message.author.id != client.user.id:
         try:
             message_toxicity_string, toxicity_dict = analyze(message.content)
-            await client.send_message(message.channel, message_toxicity_string)
+            # await client.send_message(message.channel, message_toxicity_string)
         except TypeError:  # returned none
             return
 
