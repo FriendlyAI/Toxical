@@ -79,7 +79,7 @@ async def on_message(message):
 
         if new_score <= BAN_SCORE:
             try:
-                await client.ban(message.server.get_member(message.author.id))
+                await client.ban(message.server.get_member(message.author.id), delete_message_days=0)
             except discord.errors.Forbidden:
                 print('Privilege too low')
             else:
