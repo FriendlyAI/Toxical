@@ -47,7 +47,10 @@ async def on_message(message):
     await client.process_commands(message)
     if message.content != '!score' and message.author.id != client.user.id:
         try:
-            message_toxicity_string, toxicity_dict = analyze(message.content)
+            score_change = 0
+            for sentence in message.split('. '):
+                score_change += min(analyze(sentence).get('watson'), 0)
+            # message_toxicity_string, toxicity_dict = analyze(message.content)
             # await client.send_message(message.channel, message_toxicity_string)
         except TypeError:  # returned none
             return
@@ -66,7 +69,6 @@ async def on_message(message):
             old_time = user.get('last message')
 
         time_points = (current_time - old_time) / 600
-        score_change = min(toxicity_dict['watson'], 0)
 
         new_score = min(prev_score + time_points, MAX_SCORE) + score_change
 
