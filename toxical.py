@@ -32,8 +32,8 @@ async def on_ready():
         for member in server.members:
             if database.find({'UID': member.id}).count() == 0:
                 database.insert_one({'UID': member.id, 'points': MAX_SCORE, 'last message': time.time()})
-    for x in list(database.find()):
-        print(x)
+    for member in list(database.find()):
+        print(member)
 
 
 async def list_servers():
@@ -52,7 +52,6 @@ async def on_message(message):
         try:
             score_change = 0
             for sentence in re.split(r'\. |\? |! ', message.content):
-                print(sentence)
                 if sentence:
                     score_change += min(analyze(sentence)[1].get('watson'), 0)
             # message_toxicity_string, toxicity_dict = analyze(message.content)
