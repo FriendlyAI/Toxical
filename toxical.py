@@ -1,10 +1,13 @@
 import asyncio
+import re
+import time
+
 import discord
 from discord import Game
 from discord.ext.commands import Bot
 from pymongo import MongoClient
+
 from analyze_sentiment import analyze
-import time
 
 BOT_PREFIX = '!'
 # Get at https://discordapp.com/developers/applications/me
@@ -48,11 +51,12 @@ async def on_message(message):
     if message.content != '!score' and message.author.id != client.user.id:
         try:
             score_change = 0
-            for sentence in message.split('. '):
+            for sentence in re.split(r'. |\? |! ', message.content):
                 score_change += min(analyze(sentence).get('watson'), 0)
             # message_toxicity_string, toxicity_dict = analyze(message.content)
             # await client.send_message(message.channel, message_toxicity_string)
         except TypeError:  # returned none
+            print('No message to analyze')
             return
 
         # Update score
@@ -94,7 +98,6 @@ async def on_message(message):
 
 @client.command(pass_context=True)
 async def score(ctx):
-
     if database.find({'UID': ctx.message.author.id}).count() == 0:
         database.insert_one({'UID': ctx.message.author.id, 'points': MAX_SCORE, 'last message': time.time()})
 
