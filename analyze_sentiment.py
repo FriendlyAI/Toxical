@@ -1,5 +1,7 @@
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import re
+
+import watson_developer_cloud
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from watson_developer_cloud import ToneAnalyzerV3
 
 tone_analyzer = ToneAnalyzerV3(
@@ -26,15 +28,19 @@ def analyze(sentence):
 def watson_analyze(sentence):
     bad_count = 0
     accumulate = 0
-    tone_dict = tone_analyzer.tone(tone_input=sentence, content_type='text/plain')
-    for emotion in tone_dict.get('document_tone').get('tones'):
-        if emotion.get('tone_name') in {'Frustrated', 'Impolite', 'Anger', 'Sadness'}:
-            bad_count += 1
-            accumulate += emotion.get('score')
     try:
-        return -accumulate / bad_count
-    except ZeroDivisionError:
-        return 0
+        tone_dict = tone_analyzer.tone(tone_input=sentence, content_type='text/plain')
+    except watson_developer_cloud.watson_service.WatsonApiException:
+        print('Error: no message given', repr(sentence))
+    else:
+        for emotion in tone_dict.get('document_tone').get('tones'):
+            if emotion.get('tone_name') in {'Frustrated', 'Impolite', 'Anger', 'Sadness'}:
+                bad_count += 1
+                accumulate += emotion.get('score')
+        try:
+            return -accumulate / bad_count
+        except ZeroDivisionError:
+            return 0
 
 
 def clean(sentence):

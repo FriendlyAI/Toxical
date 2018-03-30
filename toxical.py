@@ -51,8 +51,10 @@ async def on_message(message):
     if message.content != '!score' and message.author.id != client.user.id:
         try:
             score_change = 0
-            for sentence in re.split(r'. |\? |! ', message.content):
-                score_change += min(analyze(sentence)[1].get('watson'), 0)
+            for sentence in re.split(r'\. |\? |! ', message.content):
+                print(sentence)
+                if sentence:
+                    score_change += min(analyze(sentence)[1].get('watson'), 0)
             # message_toxicity_string, toxicity_dict = analyze(message.content)
             # await client.send_message(message.channel, message_toxicity_string)
         except TypeError:  # returned none
