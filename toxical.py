@@ -17,8 +17,8 @@ client = Bot(command_prefix=BOT_PREFIX)
 c = MongoClient()
 db = c['toxicity']
 
-MAX_SCORE = 25
-WARNING_SCORE = 15
+MAX_SCORE = 100
+WARNING_SCORE = 50
 BAN_SCORE = 10
 database = db.serves
 
@@ -54,8 +54,7 @@ async def on_message(message):
             for sentence in re.split(r'\. |\? |! ', message.content):
                 if sentence:
                     score_change += min(analyze(sentence)[1].get('watson'), 0)
-            # message_toxicity_string, toxicity_dict = analyze(message.content)
-            # await client.send_message(message.channel, message_toxicity_string)
+
         except TypeError:  # returned none
             print('No message to analyze')
             return
