@@ -19,7 +19,7 @@ db = c['toxicity']
 
 MAX_SCORE = 100
 WARNING_SCORE = 50
-BAN_SCORE = 10
+BAN_SCORE = 5
 database = db.serves
 
 
@@ -74,7 +74,7 @@ async def on_message(message):
 
         time_points = (current_time - old_time) / 600
 
-        new_score = min(prev_score + time_points, MAX_SCORE) + score_change
+        new_score = min(prev_score + time_points + score_change, MAX_SCORE)
 
         db.serves.update({'UID': message.author.id},
                          {'UID': message.author.id,
@@ -86,6 +86,7 @@ async def on_message(message):
                 await client.ban(message.server.get_member(message.author.id), delete_message_days=0)
             except discord.errors.Forbidden:
                 print('Privilege too low')
+                await client.send_message(message.channel, 'Toxical does not have the permissions to ban users. Please give Toxical the admin role to allow enforcement of bans.')
             else:
                 db.serves.remove({'UID': message.author.id})
 
