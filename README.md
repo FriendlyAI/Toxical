@@ -14,18 +14,11 @@ Default prefix: "!"
 
 ##### !score - returns the overall sentiment value of a user 
 
-![Gif](https://media.giphy.com/media/42ypaRu4viI9jeQ17G/giphy.gif)
-
 ### Automoderation
 
 * Warning a toxic user if their sentiment value goes under 15 
 
-![Gif](https://media.giphy.com/media/PO5EuTADf3hCPICG2W/giphy.gif)
-
 * Banning a repeated toxic user if their sentiment value goes under 10
-
-
-
 
 ## Built With
 
